@@ -6,7 +6,7 @@ spec:
   selector:
     matchLabels:
       run: hello-world
-  replicas: 2
+  replicas: 5
   template:
     metadata:
       labels:
@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: hello-world
-        image: bogdangi/hello-world:latest
+        image: bogdangi/hello-world-go:latest
         ports:
         - containerPort: 3000
 
@@ -27,8 +27,10 @@ metadata:
     run: hello-world
 spec:
   ports:
-  - port: 80
-    targetPort: 3000
+  - targetPort: 3000
+    port: 80
+    nodePort: 30080
     protocol: TCP
   selector:
     run: hello-world
+  type: NodePort

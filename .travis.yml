@@ -16,15 +16,7 @@ before_script:
 - JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}'; until kubectl get nodes -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True"; do sleep 1; done
 
 script:
-# POC
-# Build hello world application
-- cd hello_world
-- ./build.sh
-- cd -
+# Deploy hello world application
 - kubectl apply -f hello-world-deployment.yaml
-- sleep 10
-- kubectl get po
-- sleep 20
-- kubectl get po
-- sleep 40
-- kubectl get po
+# Check how the service is balanced
+- URL=`minikube service  hello-world --url`; for run in {1..100}; do curl -s $URL; echo; done | sort | uniq -c
